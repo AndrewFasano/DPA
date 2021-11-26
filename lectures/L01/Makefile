@@ -7,9 +7,12 @@ all : $(MDS)
 	$(MDS) \
 	-o $(FINAL) \
 	-t beamer \
-	-V colortheme:seahorse \
-	-V theme:Berlin \
+	-V colorlinks=true \
+	-V urlcolor=Maroon \
+	-V colortheme=seahorse \
+	-V theme=Berlin \
 	-V monofont=Consolas \
+	-V classoption=dvipsnames \
 	--toc
 
 clean:
