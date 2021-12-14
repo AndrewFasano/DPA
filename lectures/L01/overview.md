@@ -14,7 +14,7 @@ This is an **experiential, survey course** designed to rapidly introduce you to 
 
 You will learn the theory behind powerful dynamic program analysis techniques and how to apply these analyses using open-source dynamic analysis platforms.
 
-## Course Goals
+## Course goals
 By the end of the semester you should be able to:
 
 1) Explain common dynamic program analysis techniques, the results each can produce, and the theory behind each.
@@ -100,7 +100,91 @@ Is anything unclear about how the class will run?
 
 # Debuggers
 
-## Todo
-- Put
-- Content
-- Here
+## Debugging intro
+Hopefully you've been using debuggers for a while by now!
+
+How would you describe a debugger?
+
+. . .
+
+* A tool to help you analyze or modify the state of a running application
+
+. . .
+
+What do your favorite debuggers let you do?
+
+. . . 
+
+* Symbol resolution: variables & functions
+* Set breakpoints, stop when they're hit
+* Read & write memory and registers
+
+## Classes of debuggers
+There are different types of debuggers for different tasks.
+
+* Debuggers for compiled binaries:
+    * GDB: The `GNU DeBugger`. Linux, command line [*our focus*]
+    * WinDBG: Windows debugger
+        * Officially pronounced `win-d-b-g`, unofficially `wind-bag`
+
+* Debuggers for interpreted languages:
+    * Python: pdb / ipdb
+    * JavaScript: DevTools in browser
+
+* Hardware debuggers:
+    * JTAG
+    * Arm DSTREAM
+
+## Debugging strategies for compiled binaries:
+1. Just read the source
+
+2. Add some unique prints, maybe variable values
+
+    ```c
+    printf("HIT %s:%d\n", __FILE__, __LINE__);
+    ```
+
+3. Starting with or attaching a debugger
+
+    ```sh
+    gdb ./a.out  OR   gdb --pid $(pgrep a.out)
+    ```
+
+4. Scripting the debugger
+
+    ```sh
+    gdb -ex 'break f' -ex 'bt' -ex 'r' ./a.out
+    ```
+
+5. Time-travel debugging
+
+## General debugger capabilities
+
+1. Read and write CPU registers
+2. Read and write virtual memory within the debugged application
+3. Set breakpoints on addresses or symbols
+4. Single-step target program
+5. Potentially: map symbols to memory locations and registers
+
+## Debugger advantages
+1. Reliably view the actual system's state (unlike reading source)
+2. Interactively explore program state (unlike "printf debugging")
+3. Can be scripted to conditionally log/modify state or to drop into an interactive shell
+
+## Debugger Challenges
+1. Compiler optimizations
+2. Missing debug information
+
+# How Debuggers Work
+% SOURCE: https://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1
+
+## Ptrace system call
+
+## Signals
+
+
+## Trapping to your debugger
+When does the debugger pause the application and let you debug it?
+* At the start or on attach
+* On signals
+* Architecture-specific "trap-to-debugger" function - `int3` for x86
