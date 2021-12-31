@@ -175,16 +175,106 @@ There are different types of debuggers for different tasks.
 1. Compiler optimizations
 2. Missing debug information
 
-# How Debuggers Work
-% SOURCE: https://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1
+# Debugger Internals
 
-## Ptrace system call
+## Tracing the target
+Debugger asks kernel to let it trace another another process with **ptrace** system call.
 
-## Signals
+* New process: fork, child sends "traceme" request, child execs target program.
+* Existing process: provide PID. Target must be owned by same user or caller must be root.
+
+Whenever a traced process receives a signal:
+
+* Tracee is paused
+* Tracer is notified (via waitpid)
+
+Exception: SIGKILL just terminates the tracee.
+
+## Managing the paused target
+
+When a traced process is paused, the tracer can:
+
+* Read/write memory and registers via ptrace syscalls
+* Insert breakpoints or single-step tracee
+* Resume tracee (and optionally drop the current signal)
+* Detach from the tracee and resume it
+
+## Common ptrace requests:
+* `PTRACE_TRACEME`: Set the parent of this process up to trace it
+* `PTRACE_PEEKDATA`: Read a word out of tracee memory
+* `PTRACE_POKEDATA`: Write a word into tracee memory
+* `PTRACE_O_TRACEEXEC`: Stop the tracee when it next execs
+* `PTRACE_CONT`: Resume the tracee, optionally deliver a signal
+* `PTRACE_SINGLESTEP`: Resume the tracee for a single instruction
+
+## Adding Breakpoints
+Breakpoints are not part of the ptrace API. How could a debugger build this?
+
+. . .
+
+1) Read instruction at target address, save it
+2) Write an architecture-specific "trap-to-debugger" instruction (e.g., `int3`)
+3) When tracee executes this instruction, a signal will be raised and the tracer
+will regain control
+
+[/a]: int 3 is 0xCC but other ints are 0xCD 0xINTNO - need single-byte instruction for 
+[/b]: x86 to ensure we can break on single-byte instructions without side effects
+[/c]: e.g., if we had a one byte insn followed by a jmp destination we couldn't
+[/d]: handle the case where the tracee jumps straight there
 
 
-## Trapping to your debugger
-When does the debugger pause the application and let you debug it?
-* At the start or on attach
-* On signals
-* Architecture-specific "trap-to-debugger" function - `int3` for x86
+## Breakpoint cleanup
+How can the debugger let the tracee run the original instruction
+but keep the breakpoint for subsequent executions?
+
+. . .
+
+1) Restore original instruction in tracee memory
+2) Decrement program counter
+3) Single step tracee
+4) Add breakpoint back
+5) Resume
+
+
+## Usable Debuggers
+Users want to reference variables and types instead of looking at raw memory.
+Debuggers can support this if debug info is available.
+
+Formats:
+* Linux: **DWARF** (Debugging With Arbitrary Record Formats)
+* Mac: **dSYM** (Debug Symbols)
+* Windows: **PDB** (Program DataBase)
+
+Common features useful for debuggers:
+
+* Map symbols (functions and variables) to source locations and memory addresses
+* Describe variable types (structure layouts)
+
+## DWARF Info
+
+View dwarf info with `objdump --dwarf=info a.out`
+
+**Demo**
+
+
+
+## Sources & additional reading
+Eli Bendersky's:
+
+* [Blog series on debuggers](https://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1)
+* [Pyelftools for parsing DWARFs](https://github.com/eliben/pyelftools)
+
+Linux man pages:
+
+* man (2) ptrace
+* man (2) waitpid
+* man (7) signal
+
+[Dwarf Introduction](https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf)
+
+[/comment]: PDB Information https://github.com/microsoft/microsoft-pdb)
+
+## Any questions?
+
+[/comment2]: ![Bendersky's small debugger](images/debugger.jpg)
+
