@@ -256,7 +256,90 @@ View dwarf info with `objdump --dwarf=info a.out`
 
 **Demo**
 
+# Advanced GDB
 
+## GDB: GNU DeBugger
+
+* Available from your package manager
+* Command-line interfaces
+* Uses PTRACE to interact with debuggee
+
+Startup:
+* Launch binary: `gdb ./a.out`
+* Binary with arguments: `gdb --args ./a.out 1 2 3`
+* Attach to running process: `gdb --pid 123`
+* Attach to running process: `gdb --pid $(pgrep a.out)`
+
+## Shell
+Interactive prompt available when debugger starts or when debuggee gets signaled
+```
+(gdb) 
+```
+
+Access registers via variables prefixed with `$`, e.g., `$rax`.
+Each result is saved in `$X` where X is an increasing identifier:
+```
+(gdb) p $rax
+$1 = 1234
+(gdb) p $1
+$2 = 1234
+````
+
+## Inspect state
+`info registers` (or `i r`) to print register state
+
+`x` to e*x*amine memory, supports format specifiers:
+* `x/10i $pc`: print 10 instructions at program counter
+* x/w $sp`: print a word at the stack pointer
+
+`print` or `p` to view a value:
+* `p $sp`
+
+GDB understands base types and (when debug info available) custom types:
+* `x/10x (*(unsigned int*)($sp+8))`
+* `p *addr.__sockaddr__.sa_family`
+
+## Breakpoints
+Breakpoints: `break [location]` 
+
+Conditionally: `break [location] if condition`
+
+Continue from a breakpoint with `continue` or `c X` where X is the number of times to continue
+
+Alternatively: `watch` to stop whenever an expression changes
+* `watch $rax`
+* `watch myvar.some_field`
+
+## Symbol Resolution
+`load`: Read debug information from an ELF for the current process
+
+`directory X`: add `X` to the search path used to find symbols
+
+When it's possible to get symbols set up, it pays off!
+
+## Frames
+`backtrace` or `bt`: show backtrace
+
+`up` and `down` to navigate frames
+
+## TUI
+`tui enable` or `layout next`
+
+Combine debug console with source code, assembly, or register view.
+
+Up and down keys will no longer scroll through command history unless you do `focus cmd` or `focus next`
+
+## Scripting
+Persistent options can be set in `~/.gdbinit`
+
+When re-running the same binary multiple times, you may wish to automate your analysis:
+* `-x file`: run commands from file on start
+* `-ex cmd1 -ex cmd2`: run cmd1 then cmd2 on start
+
+## Extensions
+* GEF ("Jeff"): GDB Enhanced Features
+* PEDA: Python Exploit Development Assistance for GDB
+* Pwndbg: Exploit Development and Reverse Engineering with GDB Made Easy
 
 ## Sources & additional reading
 Eli Bendersky's:
@@ -266,6 +349,7 @@ Eli Bendersky's:
 
 Linux man pages:
 
+* man (1) gdb
 * man (2) ptrace
 * man (2) waitpid
 * man (7) signal
