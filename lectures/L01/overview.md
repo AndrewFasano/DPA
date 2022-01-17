@@ -11,7 +11,6 @@ This is an **experiential, survey course** designed to rapidly introduce you to 
 * software hardening
 * performance testing, and
 * improving developer comprehension of software
-
 You will learn the theory behind powerful dynamic program analysis techniques and how to apply these analyses using open-source dynamic analysis platforms.
 
 ## Course goals
@@ -40,6 +39,8 @@ Research focused on *rehosting* firmware into virtual execution environments so 
 # Class Logistics
 
 ## General Overview
+* Full syllabus available on Canvas
+
 * Always bring a laptop to subsequent classes
     * Recommended: Ubuntu 20.04+ with root access
     * Minimum: a way to run containers
@@ -49,8 +50,7 @@ Research focused on *rehosting* firmware into virtual execution environments so 
      [Docker for WSL2](https://docs.docker.com/desktop/windows/wsl/)
     * OSX: Install [Docker for Mac](https://docs.docker.com/desktop/mac/install/).
 
-* Everything you need is in the class repo: [github.com/AndrewFasano/DPA](https://github.com/AndrewFasano/DPA/)
-    * Will be updated throughout the semester as material is released.
+* Slides, assignments, labs, and grades will be released through Canvas throughout the semester.
 
 ## Schedule
 
@@ -90,10 +90,25 @@ Five assignments throughout the semester. Typically released at end of class on 
 For the final 3 weeks of the course, you will work on open-ended final projects in pairs.
 During this time, no other projects will be assigned, though lectures and lab exercises will continue as normal.
 
+* Project proposal
+* Initial research
+* Check-in meeting
+* Final report & presentation
+
 ## Grading
 - Labs: 30%
 - Assignments 50%
 - Final Project 20%
+
+## Class Policies
+See syllabus for full details:
+
+* Collaboration: Labs vs Assignments
+* Attendance: Labs and Lectures
+* COVID & Zoom
+* Late policy
+* Responsible vulnerability disclosure
+* Plagiarism
 
 ## Questions
 Is anything unclear about how the class will run?
@@ -162,7 +177,7 @@ There are different types of debuggers for different tasks.
 
 1. Read and write CPU registers
 2. Read and write virtual memory within the debugged application
-3. Set breakpoints on addresses or symbols
+3. Set breakpoints on addresses (and sometimes symbols)
 4. Single-step target program
 5. Potentially: map symbols to memory locations and registers
 
@@ -241,6 +256,7 @@ Users want to reference variables and types instead of looking at raw memory.
 Debuggers can support this if debug info is available.
 
 Formats:
+
 * Linux: **DWARF** (Debugging With Arbitrary Record Formats)
 * Mac: **dSYM** (Debug Symbols)
 * Windows: **PDB** (Program DataBase)
