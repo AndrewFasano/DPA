@@ -1,0 +1,20 @@
+# Solution for Part 1. The loop will break when reading RSP fails at termination.
+# GDB (confusingly) then prints a cryptic error about unavailable registers.
+
+set pagination off
+
+# Don't let the debugee see SIGALARM
+handle SIGALRM nostop ignore
+
+# Step into the first instruction
+starti
+
+# Print program counter in hex, then step. Forever.
+while 1
+printf "TRACE 0x%x\n", $rsp
+si
+end
+
+# Above loop will break when $RSP can't be read. Then we should quit
+# GDB sometimes hangs at the end of this though.
+q
