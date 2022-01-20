@@ -1,0 +1,42 @@
+set height 0
+set pagination off
+
+b countdown
+r 0 1 2 3 4 5 6 7 8 9 0 1 2
+
+up
+printf "Rewriting bomb from:\n\t"
+p commands
+
+set commands[0] = &add
+set argv[2] = "68"
+
+set commands[1] = &mul
+set argv[3] = "185"
+
+set commands[2] = &add
+set argv[4] = "3"
+
+set commands[3] = &mul
+set argv[5] = "100"
+
+set commands[4] = &add
+set argv[6] = "5"
+
+set commands[5] = &sub
+set argv[6] = "0"
+
+set commands[6] = &sub
+set argv[8] = "0"
+
+set commands[7] = &sub
+set argv[9] = "0"
+
+set commands[8] = &sub
+set argv[10] = "0"
+
+set commands[9] = &add
+set argv[11] = "1"
+
+printf "Configured. Let's go\n"
+c
