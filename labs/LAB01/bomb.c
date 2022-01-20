@@ -32,24 +32,29 @@ void bkp(int x, int y) {
 }
 
 void quit(int x, int y) {
-    printf("boom\n");
+    printf("BOOM\n");
     exit(2);
 }
 
+void need_more_args() {
+    printf("BOOM\n");
+    exit(1);
+}
+    
+
 
 int main(int argc, char**argv) {
-    printf("STAGE0 Hello, welcome to the bomb. Can you defuse me?\n");
+    printf("Welcome to the bomb. Can you defuse me?\n");
 
     if (argc < N_CMDS+2) {
-        printf("boom\n");
-        return 1;
+        need_more_args();
     }
 
     typedef  (*op)(int, int);
     op commands[N_CMDS];
     op f;
 
-    printf("STAGE1 Connecting internal wiring...\n");
+    printf("Connecting internal wiring...\n");
     srand(time(NULL));
     for (int idx=0 ; idx < N_CMDS; idx++) {
         int sel = (rand() % 4);
@@ -98,6 +103,6 @@ int main(int argc, char**argv) {
     if (accumulator == 0x133337) {
         puts(buf);
     }else{
-        printf("boom");
+        printf("BOOM");
     }
 }

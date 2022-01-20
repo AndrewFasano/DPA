@@ -1,0 +1,11 @@
+set breakpoint pending on
+
+b mmap if len==8191
+command
+bt
+c
+end
+
+r -mmap 8191 foo.db < in.sql
+
+q

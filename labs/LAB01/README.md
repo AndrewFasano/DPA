@@ -4,11 +4,11 @@ LAB01: GDB Scripting
 # Lab Goals
 This lab is designed to:
 1) Test the setup of your development environment to make sure it meets the minimum class requirements
-2) Introduce you to basic dynamic analysis with GDB scripting
-3) Allow you to introspect on internal state within the [TODO] application
+2) Introduce you to basic dynamic program analysis with GDB scripting
+2) Give you hands on experience using conditional breakpoints and introspecting/modifying application state dynamically.
 
 # Environment Selection
-Throughout this course, you will be buildling, running, using, and analyzing Linux-based applications.
+Throughout this course, you will be building, running, using, and analyzing Linux-based applications.
 As such, you will need an environment where you can run these.
 Some of the tools we will use may have releases or support for other OSes or architectures - you can try to use those, but no support will be provided if things go wrong.
 
@@ -23,10 +23,10 @@ Many tasks and assignments will run directly on your base environment, but somet
 for all students to simplify configuration and setup. If an assignment, lab, or a part thereof doesn't recommend using
 a container, then the container provided for students using containers will simply provide a starting environment.
 
-For today's lab, the first X challenges will use your base environment, and the remaining Y challenges will use a container.
+For today's lab, the challenges will just use your base environment.
 
 ## Basic Container Setup
-For students who are using containers as their base environment, it's extra important to familiarzie yourself with standard docker commands and arguments so you don't lose work left in your container.
+For students who are using containers as their base environment, it's extra important to familiarize yourself with standard docker commands and arguments so you don't lose work left in your container. You should set up a shared directory to store your work outside the container.
 
 To begin today's labs, try the following set of commands and flags:
 ```sh
@@ -41,14 +41,15 @@ root@container# cd /shared
 Now you are inside an Ubuntu 20.04 container and the contents of the `shared` directory will be synced between your host machine and the container. Create a file in that directory on your host and make sure it shows up inside the container.
 
 # Challenges
-## System Setup
-To begin, inside your base environment, install the sqlite3 database engine and the GDB debugger.
-1) Use your package manager to install gdb and sqlite3
-
 ## The Edges of Allocation
-In the environment where you have gdb and sqlite3, you're now going to use GDB to identify where in the code a user can specify the size of a buffer being allocated. Incorrectly sized buffers are often a cause of insecure logic (out of bounds reads/writes) so sqlite3's decision to allow a user to customize this is unusual - let's find out if it's a security risk.
+### Motivation
+For our first challenge, you're going to use GDB to dynamically identify how sqlite3 allows users to configure buffer allocation sizes. Incorrectly sized buffers are often a cause of insecure logic (out of bounds reads/writes) so sqlite3's decision to allow a user to customize this is unusual - let's find out if it's a security risk.
 
-1) Run sqlite3 under gdb 11 such that it mmaps an unusual buffer size.
+### System Setup
+Inside your base environment, install the sqlite3 database engine and the GDB debugger.
+
+### Tasks
+1) Run sqlite3 under gdb such that it mmaps an unusual buffer size.
 
 2) Set breakpoints on all calls to `mmap`. Because `mmap` is a system call, gdb can tell you about its arguments even though your version of sqlite3 has no debug symbols.
     * You can learn about this system call with `man 2 mmap`
@@ -73,15 +74,15 @@ In the environment where you have gdb and sqlite3, you're now going to use GDB t
 7) CHECK IN: show the instructor the command you built, the results, and the minimum/maximum values you found.
 
 
-## PHP
-Build the container with `Dockerfile_challenge`
-```sh
-user@host$ cd LAB01
-user@host$ mkdir shared
-user@host$ docker build -t lab01 -f Dockerfile_challenge
-[ ... output from docker building the container ... ]
-user@host$ docker run -v $(pwd)/shared:/shared --rm -it lab01
-root@container# cd /shared
-```
+## Binary Bomb
+### Motivation
+For our next challenge, you are going to defuse a cyber bomb! Your goal is to stop it from printing *BOOM* in a few ways. This will require some basic reverse engineering and possibly even factoring a number.
 
+### System Setup
+Inside your base environment, make sure you have gdb installed, the provided `bomb` binary, and the sample defuse.txt file. To run the provided script use `gdb --commands=defuse.txt ./bomb`.
 
+### Tasks
+1) Compile the bomb and read the source code - is it possible to come up with a set of inputs to defuse it looking at the source?
+2) Modify the defuse.txt script to make the program never print BOOM - don't worry about any other side effects your changes might have (hint: this should be easy, there are many solutions).
+3) Modify defuse.txt to change the commands and argv to defuse the bomb. When you're done it should print a message about winning.
+4) CHECK IN: show the instructor your defuse script, and the win message. Explain how you avoided the BOOMs in step 2.
