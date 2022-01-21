@@ -74,12 +74,12 @@ Inside your base environment, install the sqlite3 database engine and the GDB de
 7) CHECK IN: show the instructor the command you built, the results, and the minimum/maximum values you found.
 
 
-## Binary Bomb
+## Binary Bomb No longer a part of lab -  moved into A01
 ### Motivation
 For our next challenge, you are going to defuse a cyber bomb! Your goal is to stop it from printing *BOOM* in a few ways. This will require some basic reverse engineering and possibly even factoring a number.
 
 ### System Setup
-Inside your base environment, make sure you have gdb installed, the provided `bomb` binary, and the sample defuse.txt file. To run the provided script use `gdb --commands=defuse.txt ./bomb`.
+Inside your base environment, make sure you have gdb installed, the provided `bomb` binary, and the sample defuse.txt file. To run the provided script use `gdb --command=defuse.txt ./bomb`.
 
 ### Tasks
 1) Compile the bomb and read the source code - is it possible to come up with a set of inputs to defuse it looking at the source?
