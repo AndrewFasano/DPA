@@ -11,6 +11,7 @@ This is an **experiential, survey course** designed to rapidly introduce you to 
 * software hardening
 * performance testing, and
 * improving developer comprehension of software
+
 You will learn the theory behind powerful dynamic program analysis techniques and how to apply these analyses using open-source dynamic analysis platforms.
 
 ## Course goals
@@ -281,6 +282,7 @@ View dwarf info with `objdump --dwarf=info a.out`
 * Uses PTRACE to interact with debuggee
 
 Startup:
+
 * Launch binary: `gdb ./a.out`
 * Binary with arguments: `gdb --args ./a.out 1 2 3`
 * Attach to running process: `gdb --pid 123`
@@ -305,13 +307,16 @@ $2 = 1234
 `info registers` (or `i r`) to print register state
 
 `x` to e*x*amine memory, supports format specifiers:
+
 * `x/10i $pc`: print 10 instructions at program counter
 * x/w $sp`: print a word at the stack pointer
 
 `print` or `p` to view a value:
+
 * `p $sp`
 
 GDB understands base types and (when debug info available) custom types:
+
 * `x/10x (*(unsigned int*)($sp+8))`
 * `p *addr.__sockaddr__.sa_family`
 
@@ -323,6 +328,7 @@ Conditionally: `break [location] if condition`
 Continue from a breakpoint with `continue` or `c X` where X is the number of times to continue
 
 Alternatively: `watch` to stop whenever an expression changes
+
 * `watch $rax`
 * `watch myvar.some_field`
 
@@ -338,6 +344,16 @@ When it's possible to get symbols set up, it pays off!
 
 `up` and `down` to navigate frames
 
+```
+(gdb) bt
+#0  _IO_puts (str=0x55555560c100 "fasano") at ioputs.c:33
+#1  0x000055555540199d in ?? ()
+#2  0x00007ffff7a03bf7 in __libc_start_main (main=0x5555554018c0, argc=1, argv=0x7fffffffd5f8,
+    init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fffffffd5e8)
+    at ../csu/libc-start.c:310
+#3  0x0000555555401a3a in ?? ()
+```
+
 ## TUI
 `tui enable` or `layout next`
 
@@ -349,10 +365,12 @@ Up and down keys will no longer scroll through command history unless you do `fo
 Persistent options can be set in `~/.gdbinit`
 
 When re-running the same binary multiple times, you may wish to automate your analysis:
+
 * `-x file`: run commands from file on start
 * `-ex cmd1 -ex cmd2`: run cmd1 then cmd2 on start
 
-## Extensions
+## Notable extensions
+
 * GEF ("Jeff"): GDB Enhanced Features
 * PEDA: Python Exploit Development Assistance for GDB
 * Pwndbg: Exploit Development and Reverse Engineering with GDB Made Easy
