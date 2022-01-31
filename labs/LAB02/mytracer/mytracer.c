@@ -6,6 +6,7 @@
 // This `tracer` is simplified to simply record which blocks are run
 // instead of the order in which they're executed. Technically it's
 // more of a `hit counter` than a tracer.
+#define DEBUG
 
 #define MAX_MODS 256
 static void event_exit(void);

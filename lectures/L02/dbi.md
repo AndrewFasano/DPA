@@ -8,7 +8,7 @@
 A **basic block** of code is a sequence of instructions
  that will always do the same thing, unconditionally.
 
-Definitions vary depending on why you ask:
+Definitions vary depending on who you ask:
 
 * QEMU: Block ends at control transfer
 * IDA & Ghidra: Block includes function calls / syscalls
@@ -235,7 +235,7 @@ Build container from [github/AndrewFasano/DPA-containers](https://github.com/And
  
 Supports common OSes and i386 + arm based architectures.
 
-![DynamoRIO Logo](imgs/logo.png){width=100px}
+![DynamoRIO Logo](imgs/logo.png){height=90px}
 
 ## Callbacks
 * Startup
@@ -284,7 +284,8 @@ Change attributes of the L1 cache - can you increase the hit rate?
 
 Follow along at [dynamorio.org/API_tutorial_bbdynsize1.html](https://dynamorio.org/API_tutorial_bbdynsize1.html)
 
-Instead of fighting build system, will modify `../src/api/bbsize.c` and rebuild
+Instead of fighting build system, will modify `../src/api/bbsize.c` and rebuild, then run with:
+
 ```
  ./bin64/drrun -c ./api/bin/libbbsize.so -- ls
  ```
@@ -302,7 +303,7 @@ Whenever guest accesses memory, compare to shadow memory
 * Update if valid
 * Warn if invalid
 
-Other applications for security research
+Other DBI applications for security research?
 
 ## Dr. Fuzz
 
@@ -347,7 +348,7 @@ Frida:
 
 * https://dynamorio.org/page_slides.html - March 2016 presentation
 * https://dynamorio.org
-* https://titanwolf.org/Network/Articles/Article?AID=0d2a3f5b-449b-48d8-8b67-e0756c2821d0
 * http://seclab.cs.sunysb.edu/sekar/cse509/ln/binrewr.pdf
+* https://titanwolf.org/Network/Articles/Article?AID=0d2a3f5b-449b-48d8-8b67-e0756c2821d0
 
 ## Any questions?

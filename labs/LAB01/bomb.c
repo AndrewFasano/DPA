@@ -3,7 +3,7 @@
 #include <time.h>
 #define N_CMDS 10
 
-short debug = 0;
+short debug = 1;
 
 void countdown() {
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
