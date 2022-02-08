@@ -50,7 +50,97 @@ You shouldn't need to make any modifications to files other than `inject.js`.
 
 
 # Part 2: Minecraft returns
-I need a few days to finish debugging the Minecraft Java setup, but (if/)once I find a solution, I'll post this part.
-The goal will be to get frida-trace logging the Java function calls made by Minecraft and use it to do something interesting,
-it will be different from just identifying values in memory like we tried to do for LAB03.
 
+We're going to do some simple Frida-based analysis and modification of a Minecraft server.
+
+##  Setup
+
+To begin, pull the [containers repo](https://github.com/AndrewFasano/DPA-containers) and build the `Dockerfile_mc` in the frida directory which will set you up with Frida built from source, a Java JDK with debug symbols that actually works with Frida and a minecraft server:
+```
+user@host: path/to/DPA/Containers $ docker built -t frida_minecraft -f frida/Dockerfile_mc frida/
+```
+
+Launch the container with port 25565 bridged to your host:
+```
+docker run --rm -it -v$(pwd):/host -p 25565:25565 frida_minecraft
+```
+
+Then launch a second bash shell in the container (see L03 slides for more details).
+
+In your first shell, launch the Minecraft server with
+```
+ /java/openjdk-11.0.13_8/bin/java -Xmx1024M -Xms1024M -jar /java/minecraftserver.1.3.1.jar nogui
+```
+
+It will print an error about how you need to agree to the eula - do what it says (edit the config file and change false to true).
+
+
+Now launch the server again, you should see messages like `2022-02-08 21:32:17 [INFO] Preparing spawn area: 12%` and
+eventually `2022-02-08 21:32:26 [INFO] Done (11.846s)! For help, type "help" or "?"`. 
+
+During or after setup, in your second shell in the guest, run the command `frida java` and check that running `Java.available` returns `true`.
+
+## Analysis
+
+Minecraft has a bunch of obfuscated function names like `aa` and `ab` which don't convey much meaning to us.
+Instead of trying to understand those, we're going to analyze and modify the Java string objects as they're created, these use standard names that Minecraft can't hide.
+You should build a snippet of JavaScript which, when entered into the Frida console will prevent a user named `frida` from being banned from the server.
+You might do this by hooking String objects as they're created and, if you see a message to ban that user, modifying it.
+You could take a look at [this article](https://www.flowerbrackets.com/string-constructors-in-java/) to learn more about how Java string constructors work.
+The solution for this assignment involves hooking one of the functions listed there.
+
+In my testing, I found that frida would hang or crash the server every so often, but it's quick to restart the server and frida when that happens (ctrl-z + `kill -9 %1` worked well for me).
+
+This is a minimal modification and not too exciting, but Minecraft is tricky to analyze due to its size and obfuscation.
+If you can do anything else interesting, you're welcome to do that instead of the ban prevention.
+To be a bit more precise about what I'd consider interesting here's some guidelines: at least 10 lines of code, modify game state in some way such
+as changing the type of blocks that are in a map or the location of users, passively record when some action occurs with details about it.
+Be sure the state you're modifying or recording isn't simply available in the various config files that are created on disk.
+
+If you want to connect to the server, you can configure your Minecraft launcher to download a client of the same version (1.3.1) under the `installations` tab.
+If you have issues with a specific client version, you can try upgrading your server to another similarly old version.
+I was able to get frida's `Java.available` to return `true` on v 1.14, but it seemed to be more obfuscated.
+
+To get you started, here are a few snippets of code which uses Java to interact with the Minecraft server. Note that you can write scripts into a file and run them
+with `frida -l yourfile.js java`. If you add `-o log.txt` the output will be logged to `log.txt`.
+
+
+For every known class, enumerate available methods and print type information (lots of output)
+```
+function enumMethods(targetClass) {
+    var hook = Java.use(targetClass);
+    var ownMethods = hook.class.getDeclaredMethods();
+    hook.$dispose;
+    return ownMethods;
+};
+
+Java.perform(function(){
+	Java.enumerateLoadedClasses({"onMatch":
+		function(c){
+			console.log(c);
+			try {
+                var a = enumMethods(c);
+                a.forEach(function(s) {
+                     console.log("\t" + s);
+                });
+            } catch {
+                console.log("error");
+            }
+        }
+    })
+});
+```
+
+Overload the string comparison method and log when unequal strings are compared:
+```
+Java.perform(function() {
+    var str = Java.use('java.lang.String');
+    str.equals.overload('java.lang.Object').implementation = function(obj) {
+        var response = str.equals.overload('java.lang.Object').call(this, obj);
+        if (obj && obj.toString().length > 3 && !response) {
+			console.log(str.toString.call(this) + " != " + obj.toString())
+        }
+        return response;
+    }
+});
+```
