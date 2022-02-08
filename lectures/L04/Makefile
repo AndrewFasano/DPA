@@ -15,5 +15,11 @@ all : $(MDS)
 	-V classoption=dvipsnames \
 	--toc
 
+bad:
+	gcc bad.c -o bad
+
+badasan:
+	clang -O1 -g -fsanitize=address -fno-omit-frame-pointer bad.c -o badasan
+
 clean:
 	rm -rf $(PDFS)

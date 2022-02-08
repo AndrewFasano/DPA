@@ -4,22 +4,22 @@
 
 # Intro
 
-## Assignment 02 is out
-Part 1: Heap allocation tracking with Frida
+## Assignment 02
+Part 1: Heap allocation tracking with Frida - released Friday
 
 * Should work across OSes (except OS X?) if you don't want to use containers
 * Reduced in scope to accommodate part 2
 
-Part 2: Minecraft control from Frida
+Part 2: Minecraft control from Frida - will be released tonight
 
 * Frida's Java introspection only works on Linux / OS X and for specific JDK versions
-* Created a new container, `frida/Dockerfile_mc` which sets up a working JDK and an older (1.14) Minecraft server
+* Created a new container, `frida/Dockerfile_mc` which sets up a working JDK and an older (1.12) Minecraft server
 * See the assignment for details
 
 
 # The need for sanitization
 
-## Think you know C?
+## Who can read C code?
 
 . . .
 
@@ -308,6 +308,18 @@ ASAN pairs well with bug-finding (e.g., fuzzing) as subtle errors can be
 detected as soon as they occur.
 
 ASAN is credited with a very long list of bugs: [github/google/sanitizers/wiki/AddressSanitizerFoundBugs](https://github.com/google/sanitizers/wiki/AddressSanitizerFoundBugs)
+
+## ASAN Usage
+
+Use the `clang` compiler or `clang++`, and at a minimum, add 
+```
+-fsanitize=address
+```
+
+For better error messages, you should use
+```
+-O1 -g -fsanitize=address -fno-omit-frame-pointer
+```
 
 ## Any questions?
 
