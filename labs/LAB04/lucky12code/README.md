@@ -62,15 +62,15 @@ requires an absolute path to the library you built and the argument after the `.
 is set in the corresponding `.cpp` file with the `Y` function.
 
 ```
-# opt -load $(pwd)/hello/libhello.so -hello < hello.bc
-# opt -load $(pwd)/hello/libhelloputs.so -helloputs < hello.bc
+# opt -load $(pwd)/hello/libhello.so -hello < helloworld.bc
+# opt -load $(pwd)/hello/libhelloputs.so -helloputs < helloworld.bc
 ```
 
 The `hello` example doesn't modify the bytecode at all, it just prints some messages
 while analyzing the bytecode. However, `helloputs` does modify the bytecode - so let's
 save that output by passing the `-o` flag to `opt`:
 ```
-# opt -load $(pwd)/helloputs/libhelloputs.so -helloputs -o hello2.bc < hello.bc
+# opt -load $(pwd)/helloputs/libhelloputs.so -helloputs -o hello2.bc < helloworld.bc
 # lli hello2.bc
 [HelloPuts] detected that there's about to be a puts of the string:
 hello world
