@@ -65,7 +65,7 @@ in the corresponding `.cpp` file with the `Y` function.
 # opt -load $(pwd)/hello/libhelloputs.so -helloputs < hello.bc
 ```
 
-The `hello example doesn't modify the bytecode at all, it just prints some messages
+The `hello` example doesn't modify the bytecode at all, it just prints some messages
 while analyzing the bytecode. However, `helloputs` does modify the bytecode - so let's
 save that output by passing the `-o` flag to `opt`:
 ```
