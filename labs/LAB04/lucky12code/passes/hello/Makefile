@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /host/pass
+CMAKE_SOURCE_DIR = /host/lucky12code/passes
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /host/pass
+CMAKE_BINARY_DIR = /host/lucky12code/passes
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /host/pass && $(CMAKE_COMMAND) -E cmake_progress_start /host/pass/CMakeFiles /host/pass/hello/CMakeFiles/progress.marks
-	cd /host/pass && $(MAKE) -f CMakeFiles/Makefile2 hello/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /host/pass/CMakeFiles 0
+	cd /host/lucky12code/passes && $(CMAKE_COMMAND) -E cmake_progress_start /host/lucky12code/passes/CMakeFiles /host/lucky12code/passes/hello/CMakeFiles/progress.marks
+	cd /host/lucky12code/passes && $(MAKE) -f CMakeFiles/Makefile2 hello/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /host/lucky12code/passes/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /host/pass && $(MAKE) -f CMakeFiles/Makefile2 hello/clean
+	cd /host/lucky12code/passes && $(MAKE) -f CMakeFiles/Makefile2 hello/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /host/pass && $(MAKE) -f CMakeFiles/Makefile2 hello/preinstall
+	cd /host/lucky12code/passes && $(MAKE) -f CMakeFiles/Makefile2 hello/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /host/pass && $(MAKE) -f CMakeFiles/Makefile2 hello/preinstall
+	cd /host/lucky12code/passes && $(MAKE) -f CMakeFiles/Makefile2 hello/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /host/pass && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /host/lucky12code/passes && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 hello/CMakeFiles/hello.dir/rule:
-	cd /host/pass && $(MAKE) -f CMakeFiles/Makefile2 hello/CMakeFiles/hello.dir/rule
+	cd /host/lucky12code/passes && $(MAKE) -f CMakeFiles/Makefile2 hello/CMakeFiles/hello.dir/rule
 .PHONY : hello/CMakeFiles/hello.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ hello: hello/CMakeFiles/hello.dir/rule
 
 # fast build rule for target.
 hello/fast:
-	cd /host/pass && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/build
+	cd /host/lucky12code/passes && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/build
 .PHONY : hello/fast
 
 hello.o: hello.cpp.o
@@ -131,7 +131,7 @@ hello.o: hello.cpp.o
 
 # target to build an object file
 hello.cpp.o:
-	cd /host/pass && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/hello.cpp.o
+	cd /host/lucky12code/passes && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/hello.cpp.o
 .PHONY : hello.cpp.o
 
 hello.i: hello.cpp.i
@@ -140,7 +140,7 @@ hello.i: hello.cpp.i
 
 # target to preprocess a source file
 hello.cpp.i:
-	cd /host/pass && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/hello.cpp.i
+	cd /host/lucky12code/passes && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/hello.cpp.i
 .PHONY : hello.cpp.i
 
 hello.s: hello.cpp.s
@@ -149,7 +149,7 @@ hello.s: hello.cpp.s
 
 # target to generate assembly for a file
 hello.cpp.s:
-	cd /host/pass && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/hello.cpp.s
+	cd /host/lucky12code/passes && $(MAKE) -f hello/CMakeFiles/hello.dir/build.make hello/CMakeFiles/hello.dir/hello.cpp.s
 .PHONY : hello.cpp.s
 
 # Help Target
@@ -175,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /host/pass && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /host/lucky12code/passes && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

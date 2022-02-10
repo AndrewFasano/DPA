@@ -85,7 +85,7 @@ print a warning (with some details about what's going on) and exit.
 
 ### VeryLuckySan
 Start by duplicating the LuckySan directory. You'll need to edit the CMakeLists.txt file in both
-the `passes` directory as well as the just-created `veryluckysan` directory and rename `luckysan.cpp` to `veryluckysan.cpp.
+the `passes` directory as well as the just-created `veryluckysan` directory and rename `luckysan.cpp` to `veryluckysan.cpp`.
 It should be easy to figure out how to make these changes from what's in the files already.
 Then `rm -rf CMakeCache.txt  CMakeFiles` and reset the build system with `cmake .`, finally build with `make`
 

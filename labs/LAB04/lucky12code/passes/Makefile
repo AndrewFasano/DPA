@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /host/pass
+CMAKE_SOURCE_DIR = /host/lucky12code/passes
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /host/pass
+CMAKE_BINARY_DIR = /host/lucky12code/passes
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /host/pass/CMakeFiles /host/pass/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /host/lucky12code/passes/CMakeFiles /host/lucky12code/passes/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /host/pass/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /host/lucky12code/passes/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -137,17 +137,30 @@ hello/fast:
 .PHONY : hello/fast
 
 #=============================================================================
-# Target rules for targets named hellofunc
+# Target rules for targets named helloputs
 
 # Build rule for target.
-hellofunc: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 hellofunc
-.PHONY : hellofunc
+helloputs: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 helloputs
+.PHONY : helloputs
 
 # fast build rule for target.
-hellofunc/fast:
-	$(MAKE) -f hellofunc/CMakeFiles/hellofunc.dir/build.make hellofunc/CMakeFiles/hellofunc.dir/build
-.PHONY : hellofunc/fast
+helloputs/fast:
+	$(MAKE) -f helloputs/CMakeFiles/helloputs.dir/build.make helloputs/CMakeFiles/helloputs.dir/build
+.PHONY : helloputs/fast
+
+#=============================================================================
+# Target rules for targets named luckysan
+
+# Build rule for target.
+luckysan: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 luckysan
+.PHONY : luckysan
+
+# fast build rule for target.
+luckysan/fast:
+	$(MAKE) -f luckysan/CMakeFiles/luckysan.dir/build.make luckysan/CMakeFiles/luckysan.dir/build
+.PHONY : luckysan/fast
 
 # Help Target
 help:
@@ -159,7 +172,8 @@ help:
 	@echo "... edit_cache"
 	@echo "... intrinsics_gen"
 	@echo "... hello"
-	@echo "... hellofunc"
+	@echo "... helloputs"
+	@echo "... luckysan"
 .PHONY : help
 
 
