@@ -15,10 +15,10 @@ all : $(MDS)
 	-V classoption=dvipsnames \
 	--toc
 
-bad:
+bad: bad.c
 	gcc bad.c -o bad
 
-badasan:
+badasan: bad.c
 	clang -O1 -g -fsanitize=address -fno-omit-frame-pointer bad.c -o badasan
 
 clean:

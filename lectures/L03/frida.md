@@ -2,9 +2,67 @@
 % Andrew Fasano
 % Feb 1, 2022
 
-# DBI Applications
+# Intro
 
-## But first, a recap
+## Congrats on finishing assignment 01!
+So long as nobody is planning on submitting a revised version late (-10 points per late day),
+let's review the solutions briefly.
+
+* GDB Trace
+* Binary Bomb
+* Dynamorio
+
+## GDB Trace
+```
+# Don't let the debugee see SIGALARM
+handle SIGALRM nostop ignore
+
+# Step into the first instruction
+starti
+
+# Print program counter in hex, then step. Forever.
+while 1
+    printf "TRACE 0x%x\n", $rsp
+    si
+    end
+
+# Above loop will break when $RSP can't be read. Then we should quit
+q
+```
+
+## Binary Bomb
+```
+b countdown
+r 0 1 2 3 4 5 6 7 8 9 0 1 2
+
+up
+printf "Rewriting bomb from:\n\t"
+p commands
+
+set commands[0] = &add
+set argv[2] = "68"
+```
+
+## Tracing
+
+Just use Dynamo `drcov` tool!
+
+```
+drrun -t drcov
+```
+
+## Next assignment:
+
+A02: **Side Channel Coverage Maximization**
+Given a provided ``crackme'' program:
+
+* Automatically generates an input for the program
+* Record coverage achieved by each input
+* Use coverage information to guide subsequent input generation
+
+Smaller than A01 - will be released Thursday.
+
+## DBI Recap
 Dynamic binary instrumentation is when compiled binaries are 
 modified at runtime in order to accomplish some analysis goal.
 
@@ -13,6 +71,8 @@ at runtime to keep returning control flow to DBI framework.
 
 The core of a DBI framework is hard to implement as it must
 not alter target program behavior.
+
+# DBI Applications
 
 
 ## A few short videos of DBI in the real world
@@ -173,22 +233,22 @@ Many examples available online: [github/iddoeldor/frida-snippets](https://github
 Frida lists targets it can see when you run `frida-ps`.
 
 Frida can *trace* a target's calls to specific functions e.g.,
-`frida-trace -i "malloc" -i "free" sqlite3
+```
+frida-trace -i "malloc" -i "free" sqlite3
+```
 
 This generates code in `__handlers__/[libname]/[sym].js` which can be customized
 
 ## Frida tracking for heap allocations
 
-Recall LAB01 where we used GDB to hook mmap to trace allocations?
+Recall LAB01 where we used GDB to hook mmap to trace allocations? Lets try in Frida!
 
-*DEMO*
-
-Modifying generated code to record arguments:
+### Modify generated code to record arguments:
 ```
 log("allocate(0x" + args[0].toString(16) + ")");
 ```
 
-And return values:
+### Modify code to record return values:
 ```
 onLeave(log, retval, state) {
   log("-> 0x" + retval.toString(16));
@@ -247,23 +307,9 @@ Interceptor.attach(Module.findExportByName(null, "malloc"), {
 
 Then `%resume`
 
-# Wrap up
-
 ## Resources
 
 * Frida book: https://learnfrida.info/
 * Tracing example: https://monosource.github.io/tutorial/2017/01/26/frida-linux-part1/
 
-## Next assignment:
-
-A02: **Side Channel Coverage Maximization**
-Given a provided ``crackme'' program:
-
-* Automatically generates an input for the program
-* Record coverage achieved by each input
-* Use coverage information to guide subsequent input generation
-
-Smaller than A01 - will be released Thursday.
-
 ## Any questions?
-* We'll talk about A01 solution after everyone has submitted it
