@@ -99,7 +99,6 @@ bool LuckySan::runOnFunction(Function &F) {
               IRBuilder<> builder(I);
               Value *strPtr = builder.CreateGlobalStringPtr(StringRef("[LuckySan] detected that there's about to be a puts of the following string:"));
               Value *strPtr2 = builder.CreateGlobalStringPtr(StringRef("[LuckySan] now let's keep going"));
-              llvm::Value *args[] = {strPtr, builder.getInt32(0)};
               builder.CreateCall(PutsFunc, strPtr);   // Our message
               builder.CreateCall(PutsFunc, argVal);   // original message
               builder.CreateCall(PutsFunc, strPtr2);  // second message

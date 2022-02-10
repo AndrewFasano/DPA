@@ -1,0 +1,3 @@
+lucky12_prog_b.c prints 13 for the 3rd output with:
+
+idx == 16900, x=169
