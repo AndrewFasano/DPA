@@ -204,7 +204,7 @@ Example: emulate an `x86_64` guest with a serial console on the command line, 1G
     -loadvm root
 ```
 
-## PANDA API:
+## PANDA API
 
 PANDA's API is small. The guts of it are:
 
