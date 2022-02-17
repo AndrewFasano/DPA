@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void foo() {
-  printf("hello world: %d\n", 13);
+  puts("hello world: 13\n");
 }
 
 int main() {

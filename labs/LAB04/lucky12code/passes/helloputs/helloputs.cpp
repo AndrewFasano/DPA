@@ -27,9 +27,7 @@ namespace {
     // Responsible for ensuring the symbol `exit` is available in every module.
     // This function is allowed to modify the global state of the program
     bool doInitialization(Module &M);
-
-
-	  // This function examines each function individually, it is not
+    // This function examines each function individually, it is not
     // allowed to share any state between functions
     bool runOnFunction(Function &F);
   };
@@ -99,6 +97,8 @@ bool HelloPuts::runOnFunction(Function &F) {
               IRBuilder<> builder(I);
               Value *strPtr = builder.CreateGlobalStringPtr(StringRef("[HelloPuts] detected that there's about to be a puts of the following string:"));
               Value *strPtr2 = builder.CreateGlobalStringPtr(StringRef("[HelloPuts] now let's keep going"));
+
+
               builder.CreateCall(PutsFunc, strPtr);  // Our message
               builder.CreateCall(PutsFunc, argVal); // original message
               builder.CreateCall(PutsFunc, strPtr2);  // second message

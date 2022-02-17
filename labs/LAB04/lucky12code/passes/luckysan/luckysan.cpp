@@ -22,6 +22,7 @@ namespace {
     llvm::FunctionCallee StrcmpFunc;
     llvm::FunctionCallee ExitFunc;
     llvm::FunctionCallee PutsFunc;
+    llvm::FunctionCallee StrstrFunc;
     LuckySan() : FunctionPass(ID) {}
 
     // Responsible for ensuring the symbol `exit` is available in every module.
@@ -53,6 +54,14 @@ bool LuckySan::doInitialization(Module &M) {
                                          PointerType::getUnqual(IntegerType::getInt8Ty(context)),         // arg1: char* (int8t)
                                          PointerType::getUnqual(IntegerType::getInt8Ty(context))         // arg2: char* (int8t)
                                       );
+
+    StrstrFunc = M.getOrInsertFunction(
+                                        "strstr",                         // name of function
+                                         //PointerType::getUnqual(IntegerType::getInt8Ty(context)),         // return value, char*
+                                    	 Type::getInt32Ty(context),        // returns an integer (lie)
+                                         PointerType::getUnqual(IntegerType::getInt8Ty(context)),         // arg1: char* (int8t)
+                                         PointerType::getUnqual(IntegerType::getInt8Ty(context))         // arg2: char* (int8t)
+		                   );
 
     PutsFunc = M.getOrInsertFunction(
                                       "puts",                           // name of function
@@ -99,9 +108,17 @@ bool LuckySan::runOnFunction(Function &F) {
               IRBuilder<> builder(I);
               Value *strPtr = builder.CreateGlobalStringPtr(StringRef("[LuckySan] detected that there's about to be a puts of the following string:"));
               Value *strPtr2 = builder.CreateGlobalStringPtr(StringRef("[LuckySan] now let's keep going"));
+
+              Value *thirteen = builder.CreateGlobalStringPtr(StringRef("13"));
+
               builder.CreateCall(PutsFunc, strPtr);   // Our message
               builder.CreateCall(PutsFunc, argVal);   // original message
               builder.CreateCall(PutsFunc, strPtr2);  // second message
+
+	      std::vector<Value*> args = {thirteen, strPtr};
+              Value *result = builder.CreateCall(StrstrFunc, args);   // do compare
+	      Value *zero = builder.getInt32(0);
+	      Value *cmp = builder.CreateICmpEQ(result, zero);
             }
           }
         }
