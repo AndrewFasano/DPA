@@ -219,6 +219,6 @@ Look up the instruction online and see if there are multiple versions of it (e.g
 
 Rebuild the plugin and test your changes. You should now see a third `Instruction Class` listed at the top and a number of instructions it ran.
 
-**Check-in 3**: Show off your code and results from running your modified plugin.
+**Check-in 4**: Show off your code and results from running your modified plugin.
 
 
