@@ -13,8 +13,9 @@ In general, data provided by users should not be directly passed into system cal
 If a malicious user can control a command that is executed or the path of a file that is to be read/write/deleted/etc., it may be a security vulnerability.
 
 PANDA's taint system can track how data provided by a user flow through a system.
-Using this system, you will build a PANDA PyPlugin which checks if any of the arguments to a system call
-appear to be user-provided data.
+
+For this part of the lab, you will build two [PANDA PyPlugins](https://github.com/panda-re/panda/blob/dev/panda/docs/pyplugins.md)
+to taint program arguments and to see if those arguments end up getting passed to any syscalls.
 
 ## Task 1: Build a test
 You should first collect a recording of a guest which executes this sort of vulnerability.
@@ -178,7 +179,7 @@ After a few seconds, press ctrl-A + c to switch to the qemu monitor, then type q
 If this works, you're now set up to build your own custom QEMU plugins!
 
 ## Background
-The plugin `howvec` measures how vectorized the instructions executed by the guest are.
+The QEMU plugin `howvec` measures how vectorized the instructions executed by the guest are.
 In other words, it looks at each instruction executed, determines if it is or isn't vectorized and then reports some statistics.
 
 We are going to abuse this plugin to report some general statistics about the instructions executed by an `x86_64` guest. In particular, we are going to log the number of `call` instructions, `jmp` instructions, and other instructions.
