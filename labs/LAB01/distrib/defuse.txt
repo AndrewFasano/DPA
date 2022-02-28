@@ -1,0 +1,10 @@
+set height 0
+set pagination off
+
+break need_more_args
+run 
+
+up
+printf "First boom: argc=%d\n", argc
+continue
+

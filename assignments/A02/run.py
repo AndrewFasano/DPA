@@ -1,10 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import frida
 import sys
 
 # Load the javascript from our inject.js. That will be injected
 # into the target!
-inject_script = 'inject.js'
+inject_script =  'inject.js'
+
+# Just for grading
+import os
+inject_script = sys.argv[2]
+assert(os.path.isfile(inject_script)), f"Missing file {inject_script}"
+
 with open(inject_script, 'r') as f:
     js = f.read()
 

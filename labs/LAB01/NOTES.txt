@@ -1,0 +1,1 @@
+Students weren't familiar enough with SQL to create a good input setup that gets coverage of the target - provided them with in.sql to help
