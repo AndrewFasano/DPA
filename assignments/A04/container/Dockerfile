@@ -55,3 +55,11 @@ RUN mkdir cmake-build-debug
 WORKDIR /cmake-build-debug
 RUN env CC=clang CXX=clang++ cmake /Cataclysm-DDA/
 RUN make -j $(nproc)
+
+# Setup locales too
+RUN apt-fast -qq install --no-install-recommends locales && \
+    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && \
+    locale-gen
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8

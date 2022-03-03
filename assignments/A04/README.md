@@ -20,7 +20,7 @@ Once the container is built, launch it in privileged mode (necessary for `perf` 
 docker run --priviliged --rm -it cdda2
 ```
 
-Inside your container run `/Cataclysm-DDA/cataclysm` to start the game.
+Inside your container run `cd /Cataclysm-DDA; ./cataclysm` to start the game.
 
 ## Tasks:
 (Look at the details of how this will be graded before you do all these!)
