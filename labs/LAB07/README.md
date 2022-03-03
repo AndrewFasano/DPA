@@ -36,9 +36,12 @@ Check in 2: show how you changed the code and what the performance looks like be
 
 JQ is an [open-source](https://github.com/stedolan/jq) CLI utility for parsing json files.
 
-Clone the repo and build it. Install `autoconf` from apt first.
+We will build the project from source with debug info.
+First install `autoconf` and `libtool`,
+then clone the repo and build it:
 
 ```
+apt install autoconf libtool
 git clone --depth=1 https://github.com/stedolan/jq.git && cd jq
 git submodule update --init
 autoreconf -fi
@@ -48,12 +51,20 @@ make -j
 
 You can then run `./jq` to parse a JSON file.
 
-For a non-trivial input file, download `https://gist.githubusercontent.com/EmilGedda/370e487cd658b61139b63d92059e73fd/raw/a3b7358f524b9b62af188707c985e8fc586a9997/seed.json` and run
+For a non-trivial input file, download `https://gist.githubusercontent.com/EmilGedda/370e487cd658b61139b63d92059e73fd/raw/a3b7358f524b9b62af188707c985e8fc586a9997/seed.json` pass the file to jq via stdin.
 
 ```
 ./jq -CS < seed.json
 ```
 
-Look at the guide to using perf [here](https://www.brendangregg.com/perf.html). Use perf to record the execution of JQ in the following ways:
+Look at the guide to using `perf` [here](https://www.brendangregg.com/perf.html).
 
-1) 
+NOTE: If you are on WSL, you will need to run perf with an absolute path to `/usr/lib/linux-tools/<linux-version>-generic/perf` instead of just using `perf`.
+
+Use `perf` to record the execution of JQ in three different ways.
+Examine the output created by each.
+Which functions are taking the most time?
+Examine the source code, do any of the long-running functions
+look like they could be optimized?
+
+Check-in 3: describe what you found
