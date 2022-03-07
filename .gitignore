@@ -2,3 +2,7 @@
 *.out
 *.pdf
 venv
+*.iso
+*-rr-*
+*.out.*
+*.tar.gz
