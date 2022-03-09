@@ -1,0 +1,10 @@
+00000010082a 48 8d 75 d0     LEA        argv,[RBP + -0x30]
+00000010082e 48 8d 3d        LEA        argc,[0x100942]
+0d 01 00 00
+000000100835 90              NOP
+000000100836 90              NOP
+000000100837 90              NOP
+000000100838 90              NOP
+000000100839 e8 d2 fd        CALL       <EXTERNAL>::printf                               int printf(char * __format, ...)
+ff ff
+
