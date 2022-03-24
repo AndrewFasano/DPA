@@ -1,0 +1,3 @@
+Crackme 1 from https://0x00sec.org/t/keygenme-easy-cracking-your-first-program/1075
+
+Crackme 2 from https://github.com/Gisson/Writeups/tree/master/hacklu/baby%20reverse
