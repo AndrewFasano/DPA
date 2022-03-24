@@ -181,7 +181,7 @@ These differ from reversible debuggers which we've seen previously when talking 
 
 ## Tenet
 
-Released in 2021 by [Marcus Gaasedelen](https://twitter.com/gaasedelen) from [Ret2 Systems](https://ret2.io).
+Released in 2021 by [Markus Gaasedelen](https://twitter.com/gaasedelen) from [Ret2 Systems](https://ret2.io).
 
 Open-source trace explorer built as a plugin for IDA Pro (a closed-source, expensive Ghidra alternative).
 
