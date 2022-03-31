@@ -1,4 +1,3 @@
-import pickle
 import networkx as nx
 from pandare import Panda
 
@@ -6,6 +5,9 @@ panda = Panda(generic="arm")
 enabled = False
 last_pc = None
 run_idx = 0
+last_pc = None
+last_flipped = None
+
 
 graph = nx.DiGraph()
 
@@ -28,11 +30,6 @@ cur_flip_chain = [] # List of branches to flip
 flip_chain = [] # List of lists
 queued_to_flip = set()
 
-run_idx = 0
-enabled = False
-last_pc = None
-last_flipped = None
-
 # We have *TWO* versions of the same loop
 # The outer restarts panda while the inner reruns the program.
 # We try for the inner loop when we can, but we'll hit the outer loop 
@@ -54,27 +51,43 @@ while run_idx == 0 or len(flip_chain) and run_idx < CUTOFF:
         node_name = hex(panda.current_pc(cpu))
 
         if node_name not in graph.nodes:
-            if run_idx > 1:
-                print("ADDED NEW NODE")
-            graph.add_node(node_name, size=tb.size, run_idx=run_idx, is_branch=True)
+            # We'll get the opportunity to flip a branch *before* it's run
+            # but we want to see what actually happens, then make flip choices
+            # on the next run
+            return False
         else:
             graph.nodes[node_name]['is_branch'] = True
 
-        # Randomly flip in target
         import random
-        return random.choice([0, 0, 1])
+        # Check 1: Is the current node half covered?
+        if graph.out_degree(node_name) == 0:
+            # Node is uncovered, let's not mess with it until we get to it
+            return False
+        elif graph.out_degree(node_name) == 1:
+            print(f"Half covered node at {node_name} - flip")
 
-        if len(cur_flip_chain) and node_name == cur_flip_chain[0]:
-            cur_flip_chain.pop(0)
-            last_flipped = node_name
-            print(f"FLIP branch at {node_name}")
-            return True
+            if random.choice([0, 1]):
+                #last_flipped = node_name
+                return True
+            return False
 
-        #pc = panda.current_pc(cpu)
-        #procname = panda.get_process_name(cpu)
-        #print(f"{run_idx} Branch at", hex(pc), "in", procname)
+        else:
+            # Check: From the current node, are there any half covered branches
+            # If so, let's head towards those!
+            desc = nx.descendants(graph, node_name)
+            half_covered_branches = [x for x in desc if graph.nodes[x]['is_branch']==True \
+                                        and graph.out_degree(x) < 2]
+
+            if len(half_covered_branches):
+                print(f"Half covered child. At {node_name}, half children are {half_covered_branches}")
+                if random.choice([0, 1]):
+                    #last_flipped = node_name
+                    return True
+                return False
+
+            # Randomly flip in target
+            #return random.choice([0, 0, 1])
         return False
-
 
     @panda.cb_start_block_exec
     def bb(cpu, tb):
@@ -100,6 +113,7 @@ while run_idx == 0 or len(flip_chain) and run_idx < CUTOFF:
 
 
             # DEBUG
+            '''
             global last_flipped
             if last_flipped is not None and last_flipped != node_name:
                 print(f"AFTER FLIP went from {last_flipped} to {node_name}")
@@ -111,6 +125,7 @@ while run_idx == 0 or len(flip_chain) and run_idx < CUTOFF:
                     prior_node = graph.nodes[last_flipped]
                     print("\tPreviously know outputs were:", [x for x in graph.neighbors(last_flipped)])
                 last_flipped = None
+            '''
 
 
 
@@ -135,45 +150,16 @@ while run_idx == 0 or len(flip_chain) and run_idx < CUTOFF:
         if DO_COPY_TEST:
             panda.copy_to_guest("test")
 
-        while run_idx == 0 or len(flip_chain) and run_idx < CUTOFF:
+        while run_idx < CUTOFF:
             run_idx += 1
             print(f"Start run #{run_idx} with flip chain: {cur_flip_chain}")
-
-            print("Guest outputs:", repr(panda.run_serial_cmd(CMD)))
+            try:
+                print("Guest outputs:", repr(panda.run_serial_cmd(CMD)))
+            except Exception as e:
+                print("Guest output timed out:", e)
+                pass
             enabled=False
             panda.flush_tb() # flush the IR cache... soon
-            from time import sleep
-            sleep(1) # Hope it clears...
-
-            # Search the whole graph for half covered branches. Anything we've previously
-            # seen will be a duplicate and subsequently ignored
-            half_covered_branches = [x for x,y in graph.nodes(data=True) \
-                                     if y['is_branch']==True and graph.out_degree(x) < 2]
-
-            print(f"After run {run_idx} we have {len(half_covered_branches)} branches yet to explore\n")
-            for b in half_covered_branches:
-                if b not in queued_to_flip:
-                    queued_to_flip.add(b)
-                    flip_chain.append(cur_flip_chain + [b])
-
-
-            cur_flip_chain = None
-            while cur_flip_chain is None:
-                if not len(flip_chain):
-                    print("Nothing left to explore - break")
-                    break
-
-                cur_flip_chain = flip_chain.pop()
-                tmp = cur_flip_chain[-1]
-                if len([x for x in graph.neighbors(tmp)]) < 2:
-                    break
-
-                # Otherwise we've seen multiple out edges so keep going
-
-            if cur_flip_chain is None:
-                break
-
-
         # / loop
         panda.end_analysis()
 

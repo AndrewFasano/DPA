@@ -5,6 +5,10 @@ In this lab, you'll used forced execution to construct an
 intra-procedural control flow graph showing all the control
 flow transfers in target programs.
 
+**NOTE**: This lab is optional. I couldn't get the PANDA forced execution plugin to behave
+as I'd expect it to on non-trivial programs. We will use the time to debug the PANDA approach
+and/or explore how we would use other tools (e.g., DBI) to accomplish the same thing.
+
 
 ## System setup
 
@@ -20,13 +24,12 @@ docker run --rm -it -v $(pwd):/host -v $(pwd)/images:/root/.panda panda
 Copy the provided files into your shared `/host` directory:
 
 starter.py
-requirements.txt
 
 
-Inside the container, install the python dependencies for the starter code with
+Inside the container, install networkx with
 
 ```
-pip install -r /host/requirements.txt
+pip install networkx
 ```
 
 
@@ -45,4 +48,4 @@ Check in 1: Show off the graph you generated from the first run.
 
 ## Part 2: Forced execution
 
-
+Modify your script such that branches are flipped between runs such that you run different parts of the program.
