@@ -13,6 +13,7 @@ all : $(MDS)
 	-V theme=Berlin \
 	-V monofont=Consolas \
 	-V classoption=dvipsnames \
+	--listings \
 	--toc
 
 clean:

@@ -2,6 +2,7 @@
 % Andrew Fasano
 % April 4, 2022
 
+
 # Program Slicing
 
 ## Motivation
@@ -40,9 +41,11 @@ A slice of program $P$ is a new program $P'$ which contains a subset of the stat
 
 $P$ is always a valid slice of $P$. A **statement-minimal** slice is the smallest possible slice.
 
+Our discussion will be based on Agrawal and Horgan's 1990 paper: [Dynamic Program Slicing](https://dl.acm.org/doi/abs/10.1145/93548.93576).
+
 ## Example program slice
 
-Figure from Frank Tip. 1994.
+Figure from [Frank Tip (1994)](https://www.franktip.org/pubs/jpl1995.pdf).
 ![example slice](tip_example.png)
 
 ## Program dependency graphs (PGDs)
@@ -95,7 +98,7 @@ and the trace (or history) of execution.
 
 Unlike static slices, dynamic slices can ignore untaken branches which simplifies analysis of results.
 
-Precisely capturing a minimal dynamic slice can be difficult.
+Finding a statement-minimal dynamic slice is undecidable.
 
 ## Dynamic slice example: X=-1
 ```
@@ -187,6 +190,22 @@ Can we do better with this extra detail?
 3) Start from the final assignment of the target variable: traverse graph considering only marked edges.
 
 This can lead to overly large slices in certain situations with loops, better (more complex) approaches exist, see lecture resources for more information.
+
+## Fully dynamic slicing
+
+A non-executable dynamic slice can be collected with a simplified version of
+Korel and Laski's [approach](https://dl.acm.org/doi/10.1016/0020-0190) as described by [Dolan-Gavit](https://github.com/panda-re/panda/blob/dev/panda/docs/dynslice.md).
+
+Given a trace of instructions, a slice can be collected by marking relevant instructions while building a working (or a "slicing") set as follows:
+
+```
+work = { initial slice variables }
+for insn in reversed(trace):
+  if work intersect defines(insn) != {}:
+    mark(insn)
+    work = work \ defines(insn)
+    work = work union uses(insn)
+```
 
 # Dynamic Slicing Applications
 
