@@ -1,7 +1,7 @@
 # System Security with Dynamic Program Analysis - CS4910
 
 This repository contains the material used for Northeastern University's
-2021 Spring semester class *System Security with Dynamic Program Analysis*
+2022 Spring semester class *System Security with Dynamic Program Analysis*
 developed by Andrew Fasano with support from William Robertson and Markus Gaasedelen.
 
 ## About this class
